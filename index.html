@@ -2,49 +2,86 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎯 AIMBOT PRO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AIMBOT PRO</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, system-ui, sans-serif; background: #0a0a12; color: #fff; padding: 16px; min-height: 100vh; }
-        .header { text-align: center; padding: 12px 0; border-bottom: 1px solid #1a1a2e; }
-        .header h1 { font-size: 24px; background: linear-gradient(135deg, #f7971e, #ffd200); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .status-bar { display: flex; justify-content: space-between; align-items: center; background: #111122; padding: 12px 16px; border-radius: 12px; margin: 12px 0; border: 1px solid #1a1a2e; }
-        .status-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        
+        /* HEADER */
+        .header { text-align: center; padding: 12px 0 16px; border-bottom: 1px solid #1a1a2e; position: relative; }
+        .header .avatar { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid #f7971e; margin-bottom: 8px; box-shadow: 0 0 30px rgba(247,151,30,0.3); }
+        .header h1 { font-size: 22px; background: linear-gradient(135deg, #f7971e, #ffd200); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header .sub { font-size: 11px; color: #555; margin-top: 2px; }
+        
+        /* STATUS BAR */
+        .status-bar { display: flex; justify-content: space-between; align-items: center; background: #111122; padding: 10px 16px; border-radius: 12px; margin: 12px 0; border: 1px solid #1a1a2e; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
         .status-dot.on { background: #00ff88; box-shadow: 0 0 12px #00ff8866; }
         .status-dot.off { background: #ff4444; box-shadow: 0 0 12px #ff444466; }
-        .status-text { font-size: 14px; font-weight: 600; }
-        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 12px 0; }
-        .btn { padding: 16px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; color: #fff; background: #1a1a2e; cursor: pointer; text-align: center; touch-action: manipulation; }
-        .btn:active { transform: scale(0.95); opacity: 0.8; }
+        .status-text { font-size: 13px; font-weight: 600; }
+        .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 10px; font-weight: 600; }
+        .badge-on { background: #00ff8833; color: #00ff88; }
+        .badge-off { background: #ff444433; color: #ff4444; }
+        
+        /* GRID */
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 6px 0; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 6px 0; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 6px 0; }
+        
+        /* BUTTONS */
+        .btn { padding: 14px 6px; border: none; border-radius: 10px; font-size: 12px; font-weight: 600; color: #fff; background: #1a1a2e; cursor: pointer; text-align: center; touch-action: manipulation; transition: all 0.15s; }
+        .btn:active { transform: scale(0.93); opacity: 0.7; }
         .btn-success { background: linear-gradient(135deg, #00b894, #00cec9); }
         .btn-danger { background: linear-gradient(135deg, #e17055, #d63031); }
         .btn-primary { background: linear-gradient(135deg, #f7971e, #ffd200); color: #000; }
         .btn-purple { background: linear-gradient(135deg, #6c5ce7, #a29bfe); }
         .btn-blue { background: linear-gradient(135deg, #0984e3, #74b9ff); }
         .btn-pink { background: linear-gradient(135deg, #fd79a8, #e84393); }
-        .log-box { background: #0a0a15; border: 1px solid #1a1a2e; border-radius: 10px; padding: 10px; height: 120px; overflow-y: auto; font-family: monospace; font-size: 11px; color: #88ff88; margin-top: 12px; line-height: 1.6; }
+        .btn-dark { background: #2d2d44; }
+        .btn-orange { background: linear-gradient(135deg, #e17055, #fdcb6e); color: #000; }
+        .btn-teal { background: linear-gradient(135deg, #00b894, #00cec9); }
+        .btn-active { border: 2px solid #00ff88; box-shadow: 0 0 20px #00ff8844; }
+        
+        .section-title { font-size: 11px; font-weight: 600; color: #666; margin: 12px 0 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .log-box { background: #0a0a15; border: 1px solid #1a1a2e; border-radius: 10px; padding: 8px 10px; height: 100px; overflow-y: auto; font-family: monospace; font-size: 10px; color: #88ff88; margin-top: 8px; line-height: 1.5; }
         .log-entry { padding: 2px 0; border-bottom: 1px solid #0f0f1a; }
-        .log-entry .time { color: #555; margin-right: 6px; }
-        .log-entry .info { color: #88ff88; }
-        .log-entry .error { color: #ff4444; }
+        .log-entry .time { color: #444; margin-right: 4px; }
+        .log-entry .ok { color: #00ff88; }
+        .log-entry .fail { color: #ff4444; }
         .log-entry .cmd { color: #66ccff; }
-        .toast { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); background: #1a1a2e; color: #fff; padding: 12px 24px; border-radius: 12px; font-size: 14px; border: 1px solid #333; box-shadow: 0 8px 32px rgba(0,0,0,0.6); opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; max-width: 90%; text-align: center; }
+        
+        .toast { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); background: #1a1a2e; color: #fff; padding: 10px 20px; border-radius: 10px; font-size: 13px; border: 1px solid #333; box-shadow: 0 8px 32px rgba(0,0,0,0.6); opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; max-width: 90%; text-align: center; }
         .toast.show { opacity: 1; }
         .toast.success { border-color: #00ff88; }
         .toast.error { border-color: #ff4444; }
-        .footer { text-align: center; padding: 12px 0 4px; font-size: 10px; color: #333; border-top: 1px solid #1a1a2e; margin-top: 12px; }
-        #connStatus { text-align:center; padding:6px; font-size:12px; border-radius:8px; margin:8px 0; background:#111; }
-        .connected { color: #00ff88; }
-        .disconnected { color: #ff4444; }
-        .checking { color: #ffcc00; }
+        
+        .footer { text-align: center; padding: 10px 0 4px; font-size: 9px; color: #222; border-top: 1px solid #1a1a2e; margin-top: 8px; }
+        .footer a { color: #f7971e; text-decoration: none; }
+        
+        .mode-indicator { display: inline-block; padding: 2px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; background: #1a1a2e; color: #888; }
+        .mode-indicator.active { background: #f7971e33; color: #f7971e; }
+        
+        .avatar-container { position: relative; display: inline-block; }
+        .avatar-container .online-dot { position: absolute; bottom: 2px; right: 2px; width: 16px; height: 16px; background: #00ff88; border-radius: 50%; border: 2px solid #0a0a12; }
+        
+        @media (max-width: 400px) {
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .btn { font-size: 11px; padding: 12px 4px; }
+        }
     </style>
 </head>
 <body>
 
 <div class="header">
+    <!-- ======== THAY ẢNH CỦA BẠN VÀO ĐÂY ======== -->
+    <div class="avatar-container">
+        <img class="avatar" src="https://drive.google.com/file/d/1Vr2pnDi9tOhjosPMG7ONH2EhSZizSmRO/view?usp=drive_link">
+        <span class="online-dot" id="onlineDot"></span>
+    </div>
+    <!-- ========================================== -->
     <h1>🎯 AIMBOT PRO</h1>
-    <div style="font-size:11px;color:#555;">✅ Server đang hoạt động</div>
+    <div class="sub">🔒 Không Jailbreak | 📱 iOS 16+ | v3.0</div>
 </div>
 
 <div class="status-bar">
@@ -53,31 +90,64 @@
         <span class="status-text" id="statusText">ĐÃ TẮT</span>
     </div>
     <div style="text-align:right;">
-        <span style="font-size:11px;color:#888;" id="modeDisplay">HEAD</span>
+        <span class="badge badge-off" id="modeBadge">HEAD</span>
+        <div style="font-size:9px;color:#444;margin-top:2px;" id="urlDisplay">🔗 Đang kết nối...</div>
     </div>
 </div>
 
-<div id="connStatus" class="checking">⏳ Đang kiểm tra kết nối...</div>
+<div class="section-title">🎯 CHẾ ĐỘ AIM</div>
+<div class="grid-4">
+    <button class="btn btn-primary btn-active" data-mode="head" onclick="setMode('head')">👤 ĐẦU</button>
+    <button class="btn btn-blue" data-mode="neck" onclick="setMode('neck')">🦴 CỔ</button>
+    <button class="btn btn-success" data-mode="chest" onclick="setMode('chest')">💪 NGỰC</button>
+    <button class="btn btn-purple" data-mode="hips" onclick="setMode('hips')">🦵 HÔNG</button>
+</div>
 
+<div class="section-title">⚡ ĐIỀU KHIỂN</div>
 <div class="grid-2">
     <button class="btn btn-success" onclick="sendCmd('onAim')">▶️ BẬT</button>
     <button class="btn btn-danger" onclick="sendCmd('offAim')">⏹ TẮT</button>
-    <button class="btn btn-primary" onclick="sendCmd('setMode','head')">🎯 ĐẦU</button>
-    <button class="btn btn-blue" onclick="sendCmd('setMode','chest')">🎯 NGỰC</button>
     <button class="btn btn-pink" onclick="sendCmd('lock')">🔒 KHÓA</button>
-    <button class="btn btn-purple" onclick="sendCmd('unlock')">🔓 MỞ</button>
+    <button class="btn btn-blue" onclick="sendCmd('unlock')">🔓 MỞ</button>
 </div>
 
+<div class="section-title">🚀 TÍNH NĂNG PRO</div>
+<div class="grid-2">
+    <button class="btn btn-dark" id="btnAutoFire" onclick="toggleAutoFire()">🔥 AUTO OFF</button>
+    <button class="btn btn-dark" id="btnTrigger" onclick="toggleTrigger()">🎯 TRIG OFF</button>
+    <button class="btn btn-dark" id="btnRecoil" onclick="toggleRecoil()">🔫 GIẬT ON</button>
+    <button class="btn btn-dark" id="btnPrediction" onclick="togglePrediction()">📐 BÙ ON</button>
+</div>
+
+<div class="section-title">💀 CHẾ ĐỘ ĐẶC BIỆT</div>
+<div class="grid-2">
+    <button class="btn btn-danger" onclick="sendCmd('rageMode')">⚡ RAGE</button>
+    <button class="btn btn-success" onclick="sendCmd('legitMode')">🎯 LEGIT</button>
+    <button class="btn btn-orange" onclick="sendCmd('setMode','random')">🎲 RANDOM</button>
+    <button class="btn btn-teal" onclick="sendCmd('setMode','smart')">🧠 SMART</button>
+</div>
+
+<div class="section-title">📊 THỐNG KÊ</div>
+<div class="grid-2">
+    <button class="btn btn-purple" onclick="showStats()">📊 STATS</button>
+    <button class="btn btn-dark" onclick="sendCmd('reset')">🔄 RESET</button>
+</div>
+
+<div class="section-title">📋 LOG</div>
 <div class="log-box" id="logBox">
-    <div class="log-entry"><span class="time">[INIT]</span><span class="info">🚀 AIMBOT PRO khởi động</span></div>
+    <div class="log-entry"><span class="time">[INIT]</span><span class="ok">🚀 AIMBOT PRO khởi động</span></div>
 </div>
 
 <div class="toast" id="toast"></div>
-<div class="footer">🔒 KHÔNG JAILBREAK | 📱 iOS 16+</div>
+
+<div class="footer">
+    🔒 Không Jailbreak | 📱 iOS 16+ | 
+    <a href="#" onclick="testConnection(); return false;">Kiểm tra kết nối</a>
+</div>
 
 <script>
 // ================================================================
-// CẤU HÌNH
+// CẤU HÌNH - THAY URL NGROK CỦA BẠN
 // ================================================================
 const PUBLIC_URL = "https://wobbly-nucleus-bonanza.ngrok-free.dev";
 
@@ -86,20 +156,24 @@ const PUBLIC_URL = "https://wobbly-nucleus-bonanza.ngrok-free.dev";
 // ================================================================
 let isActive = false;
 let currentMode = "head";
+let autoFire = false;
+let triggerBot = false;
+let recoilControl = true;
+let prediction = true;
 
 // ================================================================
 // LOG
 // ================================================================
-function addLog(msg, type = 'info') {
+function addLog(msg, type = 'ok') {
     const box = document.getElementById('logBox');
     const time = new Date().toLocaleTimeString();
-    const map = { 'info': 'info', 'error': 'error', 'cmd': 'cmd' };
+    const map = { 'ok': 'ok', 'fail': 'fail', 'cmd': 'cmd' };
     const div = document.createElement('div');
     div.className = 'log-entry';
-    div.innerHTML = `<span class="time">[${time}]</span><span class="${map[type] || 'info'}">${msg}</span>`;
+    div.innerHTML = `<span class="time">[${time}]</span><span class="${map[type] || 'ok'}">${msg}</span>`;
     box.appendChild(div);
     box.scrollTop = box.scrollHeight;
-    if (box.children.length > 30) box.removeChild(box.children[0]);
+    if (box.children.length > 40) box.removeChild(box.children[0]);
 }
 
 // ================================================================
@@ -111,16 +185,18 @@ function showToast(msg, type = 'success') {
     t.textContent = msg;
     t.className = `toast show ${type}`;
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => { t.className = 'toast'; }, 2000);
+    toastTimer = setTimeout(() => { t.className = 'toast'; }, 2500);
 }
 
 // ================================================================
 // GỬI LỆNH
 // ================================================================
-async function sendCmd(command, data = null) {
+async function sendCmd(cmd, data = null) {
     try {
-        const payload = { command: command };
+        const payload = { command: cmd };
         if (data !== null) payload.data = data;
+        
+        addLog('📤 ' + cmd + (data ? ' ' + data : ''), 'cmd');
         
         const response = await fetch(PUBLIC_URL + '/api/command', {
             method: 'POST',
@@ -132,39 +208,118 @@ async function sendCmd(command, data = null) {
         });
         
         if (!response.ok) {
-            addLog('❌ HTTP ' + response.status, 'error');
+            addLog('❌ HTTP ' + response.status, 'fail');
             showToast('❌ Lỗi ' + response.status, 'error');
             return;
         }
         
         const result = await response.json();
-        addLog('✅ ' + command + ' → ' + result.status, 'cmd');
-        showToast('✅ ' + command + ' thành công', 'success');
+        addLog('✅ ' + cmd + ' → ' + result.status, 'ok');
+        showToast('✅ ' + cmd + ' thành công', 'success');
         
-        if (command === 'onAim') {
+        // Cập nhật giao diện
+        if (cmd === 'onAim') {
             isActive = true;
             document.getElementById('statusDot').className = 'status-dot on';
             document.getElementById('statusText').textContent = '🟢 ĐANG CHẠY';
             document.getElementById('statusText').style.color = '#00ff88';
-        } else if (command === 'offAim') {
+            document.getElementById('modeBadge').className = 'badge badge-on';
+            document.getElementById('onlineDot').style.background = '#00ff88';
+        } else if (cmd === 'offAim') {
             isActive = false;
             document.getElementById('statusDot').className = 'status-dot off';
             document.getElementById('statusText').textContent = '🔴 ĐÃ TẮT';
             document.getElementById('statusText').style.color = '#ff4444';
-        } else if (command === 'setMode') {
+            document.getElementById('modeBadge').className = 'badge badge-off';
+            document.getElementById('onlineDot').style.background = '#ff4444';
+        } else if (cmd === 'setMode') {
             currentMode = data;
-            document.getElementById('modeDisplay').textContent = data.toUpperCase();
-            addLog('🎯 Mode: ' + data.toUpperCase(), 'info');
+            document.getElementById('modeBadge').textContent = data.toUpperCase();
+            document.querySelectorAll('[data-mode]').forEach(b => {
+                b.classList.toggle('btn-active', b.dataset.mode === data);
+            });
+            addLog('🎯 Mode: ' + data.toUpperCase(), 'ok');
+        } else if (cmd === 'lock') {
+            document.getElementById('modeBadge').textContent = '🔒 ' + currentMode.toUpperCase();
+        } else if (cmd === 'unlock') {
+            document.getElementById('modeBadge').textContent = currentMode.toUpperCase();
         }
         
-        document.getElementById('connStatus').innerHTML = '✅ Kết nối thành công!';
-        document.getElementById('connStatus').className = 'connected';
-        
     } catch (e) {
-        addLog('❌ Lỗi: ' + e.message, 'error');
-        showToast('❌ ' + e.message, 'error');
-        document.getElementById('connStatus').innerHTML = '❌ Mất kết nối!';
-        document.getElementById('connStatus').className = 'disconnected';
+        addLog('❌ Lỗi: ' + e.message, 'fail');
+        showToast('❌ Lỗi gửi lệnh', 'error');
+    }
+}
+
+// ================================================================
+// LỆNH RIÊNG
+// ================================================================
+function setMode(mode) {
+    currentMode = mode;
+    sendCmd('setMode', mode);
+}
+
+function toggleAutoFire() {
+    autoFire = !autoFire;
+    sendCmd('autoFire', { enabled: autoFire });
+    const b = document.getElementById('btnAutoFire');
+    b.textContent = autoFire ? '🔥 AUTO ON' : '🔥 AUTO OFF';
+    b.style.border = autoFire ? '2px solid #00ff88' : 'none';
+    showToast('Auto Fire: ' + (autoFire ? 'ON' : 'OFF'));
+}
+
+function toggleTrigger() {
+    triggerBot = !triggerBot;
+    sendCmd('triggerBot', { enabled: triggerBot });
+    const b = document.getElementById('btnTrigger');
+    b.textContent = triggerBot ? '🎯 TRIG ON' : '🎯 TRIG OFF';
+    b.style.border = triggerBot ? '2px solid #00ff88' : 'none';
+    showToast('Trigger: ' + (triggerBot ? 'ON' : 'OFF'));
+}
+
+function toggleRecoil() {
+    recoilControl = !recoilControl;
+    sendCmd('recoilControl', { enabled: recoilControl });
+    const b = document.getElementById('btnRecoil');
+    b.textContent = recoilControl ? '🔫 GIẬT ON' : '🔫 GIẬT OFF';
+    b.style.border = recoilControl ? '2px solid #00ff88' : 'none';
+    showToast('Recoil: ' + (recoilControl ? 'ON' : 'OFF'));
+}
+
+function togglePrediction() {
+    prediction = !prediction;
+    sendCmd('prediction', { enabled: prediction });
+    const b = document.getElementById('btnPrediction');
+    b.textContent = prediction ? '📐 BÙ ON' : '📐 BÙ OFF';
+    b.style.border = prediction ? '2px solid #00ff88' : 'none';
+    showToast('Prediction: ' + (prediction ? 'ON' : 'OFF'));
+}
+
+async function showStats() {
+    try {
+        const response = await fetch(PUBLIC_URL + '/api/command', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'ngrok-skip-browser-warning': 'true'
+            },
+            body: JSON.stringify({ command: 'stats' })
+        });
+        if (!response.ok) return;
+        const result = await response.json();
+        if (result.status === 'ok') {
+            const acc = result.shots > 0 ? (result.hits / result.shots * 100).toFixed(1) : 0;
+            showToast(
+                '📊 Bắn: ' + (result.shots || 0) + 
+                ' | Trúng: ' + (result.hits || 0) + 
+                ' | Acc: ' + acc + '%' +
+                ' | HS: ' + (result.headshots || 0) +
+                ' | Kills: ' + (result.kills || 0)
+            );
+            addLog('📊 Stats: Shots=' + (result.shots || 0) + ' Hits=' + (result.hits || 0), 'ok');
+        }
+    } catch (e) {
+        showToast('❌ Không lấy được stats', 'error');
     }
 }
 
@@ -172,35 +327,44 @@ async function sendCmd(command, data = null) {
 // KIỂM TRA KẾT NỐI
 // ================================================================
 async function testConnection() {
+    addLog('⏳ Đang kiểm tra...', 'cmd');
     try {
         const response = await fetch(PUBLIC_URL + '/ping', {
             headers: { 'ngrok-skip-browser-warning': 'true' }
         });
         if (response.ok) {
-            document.getElementById('connStatus').innerHTML = '✅ Kết nối thành công!';
-            document.getElementById('connStatus').className = 'connected';
-            addLog('✅ Kết nối thành công', 'info');
+            addLog('✅ Kết nối thành công!', 'ok');
             showToast('✅ Kết nối thành công', 'success');
+            document.getElementById('urlDisplay').textContent = '🔗 ' + PUBLIC_URL.replace('https://', '');
+            document.getElementById('urlDisplay').style.color = '#00ff88';
         } else {
-            document.getElementById('connStatus').innerHTML = '❌ Lỗi HTTP ' + response.status;
-            document.getElementById('connStatus').className = 'disconnected';
-            addLog('❌ Lỗi HTTP ' + response.status, 'error');
+            addLog('❌ Lỗi HTTP ' + response.status, 'fail');
+            showToast('❌ Lỗi ' + response.status, 'error');
         }
     } catch (e) {
-        document.getElementById('connStatus').innerHTML = '❌ Không kết nối được!';
-        document.getElementById('connStatus').className = 'disconnected';
-        addLog('❌ Không kết nối: ' + e.message, 'error');
+        addLog('❌ Không kết nối được', 'fail');
         showToast('❌ Không kết nối được server', 'error');
+        document.getElementById('urlDisplay').style.color = '#ff4444';
     }
+}
+
+// ================================================================
+// CẬP NHẬT ẢNH ĐẠI DIỆN (CÓ THỂ THAY BẰNG LINK ẢNH CỦA BẠN)
+// ================================================================
+function updateAvatar() {
+    // Bạn có thể thay link ảnh ở đây
+    // document.getElementById('userAvatar').src = 'https://your-image-link.com/avatar.jpg';
 }
 
 // ================================================================
 // KHỞI TẠO
 // ================================================================
 function init() {
-    addLog('🌐 URL: ' + PUBLIC_URL, 'info');
-    addLog('✅ Sẵn sàng', 'info');
-    setTimeout(testConnection, 500);
+    addLog('🌐 URL: ' + PUBLIC_URL, 'ok');
+    addLog('✅ Sẵn sàng', 'ok');
+    document.getElementById('urlDisplay').textContent = '🔗 ' + PUBLIC_URL.replace('https://', '');
+    updateAvatar();
+    setTimeout(testConnection, 1000);
 }
 
 document.addEventListener('DOMContentLoaded', init);
