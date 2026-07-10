@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIMBOT PRO</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,7 +27,7 @@
         .btn-dark { background: #2d2d44; }
         .btn-active { border: 2px solid #00ff88; box-shadow: 0 0 20px #00ff8844; }
         .section-title { font-size: 12px; font-weight: 600; color: #888; margin: 14px 0 6px; text-transform: uppercase; letter-spacing: 1px; }
-        .log-box { background: #0a0a15; border: 1px solid #1a1a2e; border-radius: 10px; padding: 8px 10px; height: 80px; overflow-y: auto; font-family: monospace; font-size: 10px; color: #88ff88; margin-top: 8px; line-height: 1.4; }
+        .log-box { background: #0a0a15; border: 1px solid #1a1a2e; border-radius: 10px; padding: 8px 10px; height: 100px; overflow-y: auto; font-family: monospace; font-size: 10px; color: #88ff88; margin-top: 8px; line-height: 1.4; }
         .log-entry { padding: 2px 0; border-bottom: 1px solid #0f0f1a; }
         .log-entry .time { color: #555; margin-right: 4px; }
         .log-entry .info { color: #88ff88; }
@@ -79,24 +79,6 @@
     <button class="btn btn-danger" id="btnOff" onclick="offAim()">⏹ TẮT</button>
     <button class="btn btn-pink" onclick="lockAim()">🔒 KHÓA</button>
     <button class="btn btn-blue" onclick="unlockAim()">🔓 MỞ</button>
-</div>
-
-<div class="section-title">🚀 PRO</div>
-<div class="grid-2">
-    <button class="btn btn-dark" id="btnAutoFire" onclick="toggleAutoFire()">🔥 AUTO OFF</button>
-    <button class="btn btn-dark" id="btnTrigger" onclick="toggleTrigger()">🎯 TRIG OFF</button>
-</div>
-
-<div class="section-title">💀 CHẾ ĐỘ</div>
-<div class="grid-2">
-    <button class="btn btn-danger" onclick="rageMode()">⚡ RAGE</button>
-    <button class="btn btn-success" onclick="legitMode()">🎯 LEGIT</button>
-</div>
-
-<div class="section-title">📊 STATS</div>
-<div class="grid-2">
-    <button class="btn btn-purple" onclick="showStats()">📊 STATS</button>
-    <button class="btn btn-dark" onclick="resetStats()">🔄 RESET</button>
 </div>
 
 <div class="section-title">📋 LOG</div>
@@ -290,71 +272,6 @@ async function unlockAim() {
     updateStatus();
     showToast('🔓 ĐÃ MỞ', 'success');
     addLog('CMD', 'UNLOCK');
-}
-
-async function toggleAutoFire() {
-    state.autoFire = !state.autoFire;
-    await sendCommand('autoFire', { enabled: state.autoFire });
-    const b = document.getElementById('btnAutoFire');
-    b.textContent = state.autoFire ? '🔥 AUTO ON' : '🔥 AUTO OFF';
-    b.style.border = state.autoFire ? '2px solid #00ff88' : 'none';
-    showToast('Auto Fire: ' + (state.autoFire ? 'ON' : 'OFF'));
-    addLog('CMD', 'AutoFire: ' + (state.autoFire ? 'ON' : 'OFF'));
-}
-
-async function toggleTrigger() {
-    state.triggerBot = !state.triggerBot;
-    await sendCommand('triggerBot', { enabled: state.triggerBot });
-    const b = document.getElementById('btnTrigger');
-    b.textContent = state.triggerBot ? '🎯 TRIG ON' : '🎯 TRIG OFF';
-    b.style.border = state.triggerBot ? '2px solid #00ff88' : 'none';
-    showToast('Trigger: ' + (state.triggerBot ? 'ON' : 'OFF'));
-    addLog('CMD', 'Trigger: ' + (state.triggerBot ? 'ON' : 'OFF'));
-}
-
-async function rageMode() {
-    state.autoFire = true;
-    state.triggerBot = true;
-    await sendCommand('rageMode', { enabled: true });
-    document.getElementById('btnAutoFire').textContent = '🔥 AUTO ON';
-    document.getElementById('btnAutoFire').style.border = '2px solid #00ff88';
-    document.getElementById('btnTrigger').textContent = '🎯 TRIG ON';
-    document.getElementById('btnTrigger').style.border = '2px solid #00ff88';
-    showToast('⚡ RAGE MODE', 'success');
-    addLog('INFO', '⚡ RAGE MODE');
-}
-
-async function legitMode() {
-    state.autoFire = false;
-    state.triggerBot = false;
-    await sendCommand('legitMode', { enabled: true });
-    document.getElementById('btnAutoFire').textContent = '🔥 AUTO OFF';
-    document.getElementById('btnAutoFire').style.border = 'none';
-    document.getElementById('btnTrigger').textContent = '🎯 TRIG OFF';
-    document.getElementById('btnTrigger').style.border = 'none';
-    showToast('🎯 LEGIT MODE', 'success');
-    addLog('INFO', '🎯 LEGIT MODE');
-}
-
-async function showStats() {
-    const r = await sendCommand('stats');
-    if (r && r.status === 'ok') {
-        const el = state.startTime ? Math.floor((Date.now() - state.startTime) / 1000) : 0;
-        const acc = r.shots > 0 ? (r.hits / r.shots * 100).toFixed(1) : 0;
-        showToast('📊 ' + el + 's | Bắn: ' + (r.shots || 0) + ' | Trúng: ' + (r.hits || 0) + ' | Acc: ' + acc + '%');
-        addLog('INFO', 'Stats: Shots=' + (r.shots || 0) + ' Hits=' + (r.hits || 0));
-    }
-}
-
-async function resetStats() {
-    state.shotsFired = 0;
-    state.hitsLanded = 0;
-    state.headshots = 0;
-    state.kills = 0;
-    state.startTime = Date.now();
-    await sendCommand('reset');
-    showToast('🔄 ĐÃ RESET', 'success');
-    addLog('INFO', 'Stats reset');
 }
 
 // ================================================================
