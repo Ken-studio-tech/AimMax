@@ -1,264 +1,53 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AIMBOT PRO - iOS</title>
+    <title>AIMBOT PRO</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: #0a0a0f;
-            color: #ffffff;
-            padding: 16px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .header {
-            text-align: center;
-            padding: 12px 0 20px 0;
-            border-bottom: 1px solid #1a1a2e;
-        }
-        .header h1 {
-            font-size: 22px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #f7971e, #ffd200);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .header .version {
-            font-size: 12px;
-            color: #666;
-            margin-top: 4px;
-            -webkit-text-fill-color: #666;
-        }
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background: #111122;
-            border-radius: 12px;
-            margin: 16px 0;
-            border: 1px solid #1a1a2e;
-        }
-        .status-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 8px;
-        }
-        .status-dot.on {
-            background: #00ff88;
-            box-shadow: 0 0 12px #00ff8866;
-        }
-        .status-dot.off {
-            background: #ff4444;
-            box-shadow: 0 0 12px #ff444466;
-        }
-        .status-text {
-            font-size: 14px;
-            font-weight: 600;
-        }
-        .status-url {
-            font-size: 10px;
-            color: #888;
-            word-break: break-all;
-            margin-top: 4px;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin: 12px 0;
-        }
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin: 12px 0;
-        }
-        .btn {
-            padding: 14px 8px;
-            border: none;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #fff;
-            background: #1a1a2e;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-        }
-        .btn:active {
-            transform: scale(0.94);
-            opacity: 0.8;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #f7971e, #ffd200);
-            color: #000;
-        }
-        .btn-success {
-            background: linear-gradient(135deg, #00b894, #00cec9);
-        }
-        .btn-danger {
-            background: linear-gradient(135deg, #e17055, #d63031);
-        }
-        .btn-purple {
-            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-        }
-        .btn-pink {
-            background: linear-gradient(135deg, #fd79a8, #e84393);
-        }
-        .btn-blue {
-            background: linear-gradient(135deg, #0984e3, #74b9ff);
-        }
-        .btn-dark {
-            background: #2d2d44;
-        }
-        .btn-sm {
-            padding: 10px 6px;
-            font-size: 11px;
-        }
-        .btn-active {
-            border: 2px solid #00ff88;
-            box-shadow: 0 0 20px #00ff8844;
-        }
-        .section-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #aaa;
-            margin: 16px 0 8px 0;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .log-box {
-            background: #0a0a15;
-            border: 1px solid #1a1a2e;
-            border-radius: 12px;
-            padding: 12px;
-            height: 140px;
-            overflow-y: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 11px;
-            color: #88ff88;
-            margin-top: 12px;
-            line-height: 1.6;
-        }
-        .log-box::-webkit-scrollbar {
-            width: 4px;
-        }
-        .log-box::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 4px;
-        }
-        .log-entry {
-            opacity: 0.9;
-            padding: 2px 0;
-            border-bottom: 1px solid #111;
-        }
-        .log-entry .time {
-            color: #666;
-            margin-right: 8px;
-        }
-        .log-entry .info {
-            color: #88ff88;
-        }
-        .log-entry .warn {
-            color: #ffcc00;
-        }
-        .log-entry .error {
-            color: #ff4444;
-        }
-        .log-entry .cmd {
-            color: #66ccff;
-        }
-        .footer {
-            margin-top: auto;
-            text-align: center;
-            padding: 16px 0 8px 0;
-            font-size: 11px;
-            color: #444;
-            border-top: 1px solid #1a1a2e;
-        }
-        .hidden {
-            display: none;
-        }
-        .badge {
-            display: inline-block;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: 600;
-        }
-        .badge-on {
-            background: #00ff8833;
-            color: #00ff88;
-        }
-        .badge-off {
-            background: #ff444433;
-            color: #ff4444;
-        }
-        @media (max-width: 400px) {
-            .grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            .grid-2 {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .btn {
-                font-size: 11px;
-                padding: 12px 6px;
-            }
-        }
-        .toast {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1a1a2e;
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 500;
-            border: 1px solid #333;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-            z-index: 999;
-            max-width: 90%;
-            text-align: center;
-        }
-        .toast.show {
-            opacity: 1;
-        }
-        .toast.success {
-            border-color: #00ff88;
-        }
-        .toast.error {
-            border-color: #ff4444;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: #0a0a12; color: #fff; padding: 16px; min-height: 100vh; }
+        .header { text-align: center; padding: 12px 0 20px; border-bottom: 1px solid #1a1a2e; }
+        .header h1 { font-size: 24px; background: linear-gradient(135deg, #f7971e, #ffd200); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .status-bar { display: flex; justify-content: space-between; align-items: center; background: #111122; padding: 12px 16px; border-radius: 12px; margin: 12px 0; border: 1px solid #1a1a2e; }
+        .status-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .status-dot.on { background: #00ff88; box-shadow: 0 0 12px #00ff8866; }
+        .status-dot.off { background: #ff4444; box-shadow: 0 0 12px #ff444466; }
+        .status-text { font-size: 14px; font-weight: 600; }
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 8px 0; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 8px 0; }
+        .btn { padding: 14px 4px; border: none; border-radius: 10px; font-size: 12px; font-weight: 600; color: #fff; background: #1a1a2e; cursor: pointer; transition: all 0.15s; text-align: center; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        .btn:active { transform: scale(0.92); opacity: 0.7; }
+        .btn-primary { background: linear-gradient(135deg, #f7971e, #ffd200); color: #000; }
+        .btn-success { background: linear-gradient(135deg, #00b894, #00cec9); }
+        .btn-danger { background: linear-gradient(135deg, #e17055, #d63031); }
+        .btn-purple { background: linear-gradient(135deg, #6c5ce7, #a29bfe); }
+        .btn-pink { background: linear-gradient(135deg, #fd79a8, #e84393); }
+        .btn-blue { background: linear-gradient(135deg, #0984e3, #74b9ff); }
+        .btn-dark { background: #2d2d44; }
+        .btn-active { border: 2px solid #00ff88; box-shadow: 0 0 20px #00ff8844; }
+        .section-title { font-size: 12px; font-weight: 600; color: #888; margin: 14px 0 6px; text-transform: uppercase; letter-spacing: 1px; }
+        .log-box { background: #0a0a15; border: 1px solid #1a1a2e; border-radius: 10px; padding: 8px 10px; height: 100px; overflow-y: auto; font-family: monospace; font-size: 10px; color: #88ff88; margin-top: 8px; line-height: 1.4; }
+        .log-entry { padding: 2px 0; border-bottom: 1px solid #0f0f1a; }
+        .log-entry .time { color: #555; margin-right: 4px; }
+        .log-entry .info { color: #88ff88; }
+        .log-entry .error { color: #ff4444; }
+        .log-entry .cmd { color: #66ccff; }
+        .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 10px; font-weight: 600; }
+        .badge-on { background: #00ff8833; color: #00ff88; }
+        .badge-off { background: #ff444433; color: #ff4444; }
+        .toast { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); background: #1a1a2e; color: #fff; padding: 10px 20px; border-radius: 10px; font-size: 13px; border: 1px solid #333; box-shadow: 0 8px 32px rgba(0,0,0,0.6); opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; max-width: 90%; text-align: center; }
+        .toast.show { opacity: 1; }
+        .toast.success { border-color: #00ff88; }
+        .toast.error { border-color: #ff4444; }
+        .footer { text-align: center; padding: 12px 0 4px; font-size: 10px; color: #333; border-top: 1px solid #1a1a2e; margin-top: 8px; }
     </style>
 </head>
 <body>
 
 <div class="header">
     <h1>🎯 AIMBOT PRO</h1>
-    <div class="version">v3.0.0 | Build 20260710 | iOS 16+</div>
+    <div class="version" style="font-size:11px;color:#555;margin-top:2px;">v3.0 | Vercel + Ngrok</div>
 </div>
 
 <div class="status-bar">
@@ -268,41 +57,39 @@
     </div>
     <div style="text-align:right;">
         <span class="badge badge-off" id="modeBadge">HEAD</span>
-        <div class="status-url" id="urlDisplay">🔗 Đang kết nối...</div>
+        <div class="status-url" style="font-size:9px;color:#444;word-break:break-all;margin-top:2px;" id="urlDisplay">🔗 Đang kết nối...</div>
     </div>
 </div>
 
 <div class="section-title">🎯 CHẾ ĐỘ AIM</div>
 <div class="grid">
-    <button class="btn btn-primary btn-active" data-mode="head" onclick="setMode('head')">👤 ĐẦU</button>
-    <button class="btn btn-blue" data-mode="neck" onclick="setMode('neck')">🦴 CỔ</button>
-    <button class="btn btn-success" data-mode="chest" onclick="setMode('chest')">💪 NGỰC</button>
-    <button class="btn btn-purple" data-mode="hips" onclick="setMode('hips')">🦵 HÔNG</button>
+    <button class="btn btn-primary btn-active" data-mode="head" onclick="setMode('head')">ĐẦU</button>
+    <button class="btn btn-blue" data-mode="neck" onclick="setMode('neck')">CỔ</button>
+    <button class="btn btn-success" data-mode="chest" onclick="setMode('chest')">NGỰC</button>
+    <button class="btn btn-purple" data-mode="hips" onclick="setMode('hips')">HÔNG</button>
 </div>
 
 <div class="section-title">⚡ ĐIỀU KHIỂN</div>
 <div class="grid-2">
-    <button class="btn btn-success" id="btnOn" onclick="onAim()">▶️ BẬT</button>
-    <button class="btn btn-danger" id="btnOff" onclick="offAim()">⏹ TẮT</button>
-    <button class="btn btn-pink" id="btnLock" onclick="lockAim()">🔒 KHÓA</button>
-    <button class="btn btn-blue" id="btnUnlock" onclick="unlockAim()">🔓 MỞ KHÓA</button>
+    <button class="btn btn-success" onclick="onAim()">▶️ BẬT</button>
+    <button class="btn btn-danger" onclick="offAim()">⏹ TẮT</button>
+    <button class="btn btn-pink" onclick="lockAim()">🔒 KHÓA</button>
+    <button class="btn btn-blue" onclick="unlockAim()">🔓 MỞ</button>
 </div>
 
-<div class="section-title">🚀 TÍNH NĂNG PRO</div>
+<div class="section-title">🚀 PRO</div>
 <div class="grid-2">
-    <button class="btn btn-dark" id="btnAutoFire" onclick="toggleAutoFire()">🔥 AUTO FIRE OFF</button>
-    <button class="btn btn-dark" id="btnTrigger" onclick="toggleTrigger()">🎯 TRIGGER OFF</button>
-    <button class="btn btn-dark" id="btnRecoil" onclick="toggleRecoil()">🔫 BỎ GIẬT ON</button>
-    <button class="btn btn-dark" id="btnPrediction" onclick="togglePrediction()">📐 BÙ ĐẠN ON</button>
+    <button class="btn btn-dark" id="btnAutoFire" onclick="toggleAutoFire()">🔥 AUTO OFF</button>
+    <button class="btn btn-dark" id="btnTrigger" onclick="toggleTrigger()">🎯 TRIG OFF</button>
 </div>
 
-<div class="section-title">💀 CHẾ ĐỘ ĐẶC BIỆT</div>
+<div class="section-title">💀 CHẾ ĐỘ</div>
 <div class="grid-2">
-    <button class="btn btn-danger" onclick="rageMode()">⚡ RAGE MODE</button>
-    <button class="btn btn-success" onclick="legitMode()">🎯 LEGIT MODE</button>
+    <button class="btn btn-danger" onclick="rageMode()">⚡ RAGE</button>
+    <button class="btn btn-success" onclick="legitMode()">🎯 LEGIT</button>
 </div>
 
-<div class="section-title">📊 THỐNG KÊ</div>
+<div class="section-title">📊 STATS</div>
 <div class="grid-2">
     <button class="btn btn-purple" onclick="showStats()">📊 STATS</button>
     <button class="btn btn-dark" onclick="resetStats()">🔄 RESET</button>
@@ -310,27 +97,18 @@
 
 <div class="section-title">📋 LOG</div>
 <div class="log-box" id="logBox">
-    <div class="log-entry"><span class="time">[START]</span><span class="info">🚀 AIMBOT PRO đã khởi động</span></div>
-    <div class="log-entry"><span class="time">[READY]</span><span class="info">📱 Sẵn sàng hoạt động</span></div>
+    <div class="log-entry"><span class="time">[INIT]</span><span class="info">🚀 AIMBOT PRO khởi động</span></div>
 </div>
 
 <div class="toast" id="toast"></div>
-
-<div class="footer">
-    🔒 KHÔNG CẦN JAILBREAK | 📱 iOS 16+ | 💡 Bấm nút để điều khiển
-</div>
+<div class="footer">🔒 KHÔNG JAILBREAK | 📱 iOS 16+ | Vercel</div>
 
 <script>
 // ================================================================
-// CẤU HÌNH
+// CẤU HÌNH - THAY BẰNG URL NGROK CỦA BẠN
 // ================================================================
-const CONFIG = {
-    TOKEN: "8974971409:AAHtkw587ujD5KVX6YT3Px8BdnWI6mKvjNw",
-    AUTHORIZED_USERS: ["8583745893"],
-    AUTHORIZED_DEVICES: ["00008020-001954C13433002E"],
-    PUBLIC_URL: "https://wobbly-nucleus-bonanza.ngrok-free.dev",
-    VERSION: "3.0.0"
-};
+const PUBLIC_URL = "https://wobbly-nucleus-bonanza.ngrok-free.dev";
+const VERSION = "3.0.0";
 
 // ================================================================
 // TRẠNG THÁI
@@ -341,266 +119,96 @@ const state = {
     locked: false,
     autoFire: false,
     triggerBot: false,
-    recoilControl: true,
-    prediction: true,
     shotsFired: 0,
     hitsLanded: 0,
     headshots: 0,
     kills: 0,
     startTime: 0,
-    connectionStatus: "DISCONNECTED",
-    deviceUID: "",
-    sessionId: ""
+    connectionStatus: "DISCONNECTED"
 };
 
 // ================================================================
-// LẤY UID IPHONE (THẬT TỪ THIẾT BỊ)
+// LOG
 // ================================================================
-function getDeviceUID() {
-    return new Promise((resolve) => {
-        try {
-            if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.getUID) {
-                window.webkit.messageHandlers.getUID.postMessage({});
-                setTimeout(() => {
-                    resolve("00008020-001954C13433002E");
-                }, 500);
-            } else {
-                const stored = localStorage.getItem('aimbot_device_uid');
-                if (stored) {
-                    resolve(stored);
-                } else {
-                    const uid = 'DEV-' + Date.now().toString(36) + '-' + Math.random().toString(36).substr(2, 8).toUpperCase();
-                    localStorage.setItem('aimbot_device_uid', uid);
-                    resolve(uid);
-                }
-            }
-        } catch {
-            resolve('UNKNOWN_' + Date.now().toString(36));
-        }
-    });
+function addLog(type, msg) {
+    const box = document.getElementById('logBox');
+    const time = new Date().toLocaleTimeString();
+    const map = { 'CMD': 'cmd', 'INFO': 'info', 'ERROR': 'error' };
+    const div = document.createElement('div');
+    div.className = 'log-entry';
+    div.innerHTML = `<span class="time">[${time}]</span><span class="${map[type] || 'info'}">${msg}</span>`;
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+    if (box.children.length > 30) box.removeChild(box.children[0]);
 }
 
 // ================================================================
-// HÀM GỬI LỆNH
+// TOAST
 // ================================================================
-async function sendCommand(command, data = {}) {
-    const uid = await getDeviceUID();
-    const url = `${CONFIG.PUBLIC_URL}/api/command`;
-    const payload = {
-        command: command,
-        data: data,
-        timestamp: Date.now() / 1000,
-        version: CONFIG.VERSION,
-        device_uid: uid,
-        session_id: state.sessionId || Date.now().toString(36)
-    };
+let toastTimer = null;
+function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast show ${type}`;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.className = 'toast'; }, 2000);
+}
+
+// ================================================================
+// GỬI LỆNH - DÙNG FETCH VỚI CORS
+// ================================================================
+async function sendCommand(cmd, data = {}) {
     try {
+        const url = PUBLIC_URL + '/api/command';
+        const payload = {
+            command: cmd,
+            data: data,
+            timestamp: Date.now() / 1000,
+            version: VERSION,
+            device_uid: 'WEB_' + Date.now().toString(36),
+            session_id: Date.now().toString(36)
+        };
+        
         const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'ngrok-skip-browser-warning': 'true',
-                'X-Aimbot-Version': CONFIG.VERSION,
-                'X-Device-UID': uid
+                'X-Aimbot-Version': VERSION,
+                'X-Device-UID': 'WEB_' + Date.now().toString(36)
             },
             body: JSON.stringify(payload)
         });
-        if (response.ok) {
-            const result = await response.json();
-            state.connectionStatus = "CONNECTED";
-            updateStatus();
-            addLog('CMD', `${command.toUpperCase()} → OK`);
-            return result;
-        } else {
-            state.connectionStatus = `ERROR_${response.status}`;
-            updateStatus();
-            addLog('ERROR', `${command} → HTTP ${response.status}`);
+        
+        if (!response.ok) {
+            addLog('ERROR', 'HTTP ' + response.status);
+            showToast('❌ Lỗi HTTP: ' + response.status, 'error');
             return null;
         }
-    } catch (e) {
-        state.connectionStatus = "NO_CONNECTION";
+        
+        const result = await response.json();
+        state.connectionStatus = "CONNECTED";
+        addLog('INFO', '✅ Kết nối thành công');
         updateStatus();
-        addLog('ERROR', `${command} → ${e.message}`);
+        return result;
+        
+    } catch (e) {
+        state.connectionStatus = "ERROR";
+        addLog('ERROR', 'Lỗi: ' + e.message);
+        showToast('❌ ' + e.message, 'error');
+        updateStatus();
         return null;
     }
 }
 
 // ================================================================
-// LỆNH AIM
-// ================================================================
-async function setMode(mode) {
-    state.mode = mode;
-    await sendCommand('setMode', { mode: mode });
-    updateStatus();
-    showToast(`🎯 CHUYỂN SANG ${mode.toUpperCase()}`);
-    addLog('CMD', `Mode: ${mode.toUpperCase()}`);
-    document.querySelectorAll('[data-mode]').forEach(btn => {
-        btn.classList.toggle('btn-active', btn.dataset.mode === mode);
-    });
-}
-
-async function onAim() {
-    const result = await sendCommand('onAim');
-    if (result && result.status === 'ok') {
-        state.isActive = true;
-        state.startTime = Date.now();
-        updateStatus();
-        showToast('✅ AIMBOT ĐÃ BẬT');
-        addLog('INFO', '🟢 Aimbot ON');
-    } else {
-        showToast('❌ LỖI KẾT NỐI');
-        addLog('ERROR', 'Không thể bật aimbot');
-    }
-}
-
-async function offAim() {
-    const result = await sendCommand('offAim');
-    if (result && result.status === 'ok') {
-        state.isActive = false;
-        updateStatus();
-        showToast('⏹ AIMBOT ĐÃ TẮT');
-        addLog('INFO', '🔴 Aimbot OFF');
-    } else {
-        showToast('❌ LỖI');
-        addLog('ERROR', 'Không thể tắt aimbot');
-    }
-}
-
-async function lockAim() {
-    state.locked = true;
-    await sendCommand('lock');
-    updateStatus();
-    showToast('🔒 ĐÃ KHÓA MỤC TIÊU');
-    addLog('CMD', 'LOCK');
-}
-
-async function unlockAim() {
-    state.locked = false;
-    await sendCommand('unlock');
-    updateStatus();
-    showToast('🔓 ĐÃ MỞ KHÓA');
-    addLog('CMD', 'UNLOCK');
-}
-
-// ================================================================
-// TÍNH NĂNG PRO
-// ================================================================
-async function toggleAutoFire() {
-    state.autoFire = !state.autoFire;
-    await sendCommand('autoFire', { enabled: state.autoFire });
-    const btn = document.getElementById('btnAutoFire');
-    btn.textContent = state.autoFire ? '🔥 AUTO FIRE ON' : '🔥 AUTO FIRE OFF';
-    btn.style.border = state.autoFire ? '2px solid #00ff88' : 'none';
-    showToast(`AUTO FIRE: ${state.autoFire ? 'ON' : 'OFF'}`);
-    addLog('CMD', `AutoFire: ${state.autoFire ? 'ON' : 'OFF'}`);
-}
-
-async function toggleTrigger() {
-    state.triggerBot = !state.triggerBot;
-    await sendCommand('triggerBot', { enabled: state.triggerBot });
-    const btn = document.getElementById('btnTrigger');
-    btn.textContent = state.triggerBot ? '🎯 TRIGGER ON' : '🎯 TRIGGER OFF';
-    btn.style.border = state.triggerBot ? '2px solid #00ff88' : 'none';
-    showToast(`TRIGGER: ${state.triggerBot ? 'ON' : 'OFF'}`);
-    addLog('CMD', `Trigger: ${state.triggerBot ? 'ON' : 'OFF'}`);
-}
-
-async function toggleRecoil() {
-    state.recoilControl = !state.recoilControl;
-    await sendCommand('recoilControl', { enabled: state.recoilControl });
-    const btn = document.getElementById('btnRecoil');
-    btn.textContent = state.recoilControl ? '🔫 BỎ GIẬT ON' : '🔫 BỎ GIẬT OFF';
-    btn.style.border = state.recoilControl ? '2px solid #00ff88' : 'none';
-    showToast(`RECOIL: ${state.recoilControl ? 'ON' : 'OFF'}`);
-    addLog('CMD', `Recoil: ${state.recoilControl ? 'ON' : 'OFF'}`);
-}
-
-async function togglePrediction() {
-    state.prediction = !state.prediction;
-    await sendCommand('prediction', { enabled: state.prediction });
-    const btn = document.getElementById('btnPrediction');
-    btn.textContent = state.prediction ? '📐 BÙ ĐẠN ON' : '📐 BÙ ĐẠN OFF';
-    btn.style.border = state.prediction ? '2px solid #00ff88' : 'none';
-    showToast(`PREDICTION: ${state.prediction ? 'ON' : 'OFF'}`);
-    addLog('CMD', `Prediction: ${state.prediction ? 'ON' : 'OFF'}`);
-}
-
-async function rageMode() {
-    state.autoFire = true;
-    state.triggerBot = true;
-    state.recoilControl = false;
-    state.prediction = true;
-    state.hitboxScale = 2.0;
-    await sendCommand('rageMode', { enabled: true });
-    document.getElementById('btnAutoFire').textContent = '🔥 AUTO FIRE ON';
-    document.getElementById('btnAutoFire').style.border = '2px solid #00ff88';
-    document.getElementById('btnTrigger').textContent = '🎯 TRIGGER ON';
-    document.getElementById('btnTrigger').style.border = '2px solid #00ff88';
-    document.getElementById('btnRecoil').textContent = '🔫 BỎ GIẬT OFF';
-    document.getElementById('btnRecoil').style.border = '2px solid #ff4444';
-    document.getElementById('btnPrediction').textContent = '📐 BÙ ĐẠN ON';
-    document.getElementById('btnPrediction').style.border = '2px solid #00ff88';
-    showToast('⚡ RAGE MODE ĐÃ BẬT');
-    addLog('INFO', '⚡ RAGE MODE ACTIVATED');
-}
-
-async function legitMode() {
-    state.autoFire = false;
-    state.triggerBot = false;
-    state.recoilControl = true;
-    state.prediction = true;
-    state.hitboxScale = 1.2;
-    await sendCommand('legitMode', { enabled: true });
-    document.getElementById('btnAutoFire').textContent = '🔥 AUTO FIRE OFF';
-    document.getElementById('btnAutoFire').style.border = 'none';
-    document.getElementById('btnTrigger').textContent = '🎯 TRIGGER OFF';
-    document.getElementById('btnTrigger').style.border = 'none';
-    document.getElementById('btnRecoil').textContent = '🔫 BỎ GIẬT ON';
-    document.getElementById('btnRecoil').style.border = '2px solid #00ff88';
-    document.getElementById('btnPrediction').textContent = '📐 BÙ ĐẠN ON';
-    document.getElementById('btnPrediction').style.border = '2px solid #00ff88';
-    showToast('🎯 LEGIT MODE ĐÃ BẬT');
-    addLog('INFO', '🎯 LEGIT MODE ACTIVATED');
-}
-
-// ================================================================
-// THỐNG KÊ
-// ================================================================
-async function showStats() {
-    const result = await sendCommand('stats');
-    if (result && result.status === 'ok') {
-        const data = result;
-        const elapsed = state.startTime ? Math.floor((Date.now() - state.startTime) / 1000) : 0;
-        const accuracy = data.shots > 0 ? (data.hits / data.shots * 100).toFixed(1) : 0;
-        showToast(
-            `📊 Thời gian: ${elapsed}s | Bắn: ${data.shots || 0} | Trúng: ${data.hits || 0} | Chính xác: ${accuracy}% | Headshot: ${data.headshots || 0} | Kills: ${data.kills || 0}`
-        );
-        addLog('INFO', `Stats: Shots=${data.shots||0} Hits=${data.hits||0} Headshots=${data.headshots||0} Kills=${data.kills||0}`);
-    } else {
-        showToast('❌ Không thể lấy thống kê');
-    }
-}
-
-async function resetStats() {
-    state.shotsFired = 0;
-    state.hitsLanded = 0;
-    state.headshots = 0;
-    state.kills = 0;
-    state.startTime = Date.now();
-    await sendCommand('reset');
-    showToast('🔄 ĐÃ RESET THỐNG KÊ');
-    addLog('INFO', 'Stats reset');
-}
-
-// ================================================================
-// CẬP NHẬT GIAO DIỆN
+// UPDATE STATUS
 // ================================================================
 function updateStatus() {
     const dot = document.getElementById('statusDot');
     const text = document.getElementById('statusText');
     const modeBadge = document.getElementById('modeBadge');
     const urlDisplay = document.getElementById('urlDisplay');
-    
     if (state.isActive) {
         dot.className = 'status-dot on';
         text.textContent = '🟢 ĐANG CHẠY';
@@ -611,80 +219,173 @@ function updateStatus() {
         text.style.color = '#ff4444';
     }
     modeBadge.textContent = state.mode.toUpperCase();
-    modeBadge.className = `badge ${state.isActive ? 'badge-on' : 'badge-off'}`;
-    urlDisplay.textContent = `🔗 ${CONFIG.PUBLIC_URL.replace('https://', '')}`;
+    modeBadge.className = 'badge ' + (state.isActive ? 'badge-on' : 'badge-off');
+    urlDisplay.textContent = '🔗 ' + PUBLIC_URL.replace('https://', '');
 }
 
 // ================================================================
-// LOG
+// LỆNH
 // ================================================================
-function addLog(type, message) {
-    const logBox = document.getElementById('logBox');
-    const time = new Date().toLocaleTimeString();
-    const colors = {
-        'CMD': 'cmd',
-        'INFO': 'info',
-        'WARN': 'warn',
-        'ERROR': 'error'
-    };
-    const div = document.createElement('div');
-    div.className = 'log-entry';
-    div.innerHTML = `<span class="time">[${time}]</span><span class="${colors[type] || 'info'}">${message}</span>`;
-    logBox.appendChild(div);
-    logBox.scrollTop = logBox.scrollHeight;
-    if (logBox.children.length > 100) {
-        logBox.removeChild(logBox.children[0]);
+async function setMode(mode) {
+    state.mode = mode;
+    await sendCommand('setMode', { mode: mode });
+    updateStatus();
+    showToast('🎯 ' + mode.toUpperCase());
+    addLog('INFO', 'Mode: ' + mode.toUpperCase());
+    document.querySelectorAll('[data-mode]').forEach(b => {
+        b.classList.toggle('btn-active', b.dataset.mode === mode);
+    });
+}
+
+async function onAim() {
+    addLog('INFO', '⏳ Đang gửi lệnh BẬT...');
+    const r = await sendCommand('onAim');
+    if (r && r.status === 'ok') {
+        state.isActive = true;
+        state.startTime = Date.now();
+        updateStatus();
+        showToast('✅ AIMBOT ĐÃ BẬT', 'success');
+        addLog('INFO', '🟢 Aimbot ON');
+    } else {
+        addLog('ERROR', 'Bật aimbot thất bại');
     }
 }
 
+async function offAim() {
+    const r = await sendCommand('offAim');
+    if (r && r.status === 'ok') {
+        state.isActive = false;
+        updateStatus();
+        showToast('⏹ ĐÃ TẮT', 'success');
+        addLog('INFO', '🔴 Aimbot OFF');
+    }
+}
+
+async function lockAim() {
+    state.locked = true;
+    await sendCommand('lock');
+    updateStatus();
+    showToast('🔒 ĐÃ KHÓA', 'success');
+    addLog('CMD', 'LOCK');
+}
+
+async function unlockAim() {
+    state.locked = false;
+    await sendCommand('unlock');
+    updateStatus();
+    showToast('🔓 ĐÃ MỞ', 'success');
+    addLog('CMD', 'UNLOCK');
+}
+
+async function toggleAutoFire() {
+    state.autoFire = !state.autoFire;
+    await sendCommand('autoFire', { enabled: state.autoFire });
+    const b = document.getElementById('btnAutoFire');
+    b.textContent = state.autoFire ? '🔥 AUTO ON' : '🔥 AUTO OFF';
+    b.style.border = state.autoFire ? '2px solid #00ff88' : 'none';
+    showToast('Auto Fire: ' + (state.autoFire ? 'ON' : 'OFF'));
+    addLog('CMD', 'AutoFire: ' + (state.autoFire ? 'ON' : 'OFF'));
+}
+
+async function toggleTrigger() {
+    state.triggerBot = !state.triggerBot;
+    await sendCommand('triggerBot', { enabled: state.triggerBot });
+    const b = document.getElementById('btnTrigger');
+    b.textContent = state.triggerBot ? '🎯 TRIG ON' : '🎯 TRIG OFF';
+    b.style.border = state.triggerBot ? '2px solid #00ff88' : 'none';
+    showToast('Trigger: ' + (state.triggerBot ? 'ON' : 'OFF'));
+    addLog('CMD', 'Trigger: ' + (state.triggerBot ? 'ON' : 'OFF'));
+}
+
+async function rageMode() {
+    state.autoFire = true;
+    state.triggerBot = true;
+    await sendCommand('rageMode', { enabled: true });
+    document.getElementById('btnAutoFire').textContent = '🔥 AUTO ON';
+    document.getElementById('btnAutoFire').style.border = '2px solid #00ff88';
+    document.getElementById('btnTrigger').textContent = '🎯 TRIG ON';
+    document.getElementById('btnTrigger').style.border = '2px solid #00ff88';
+    showToast('⚡ RAGE MODE', 'success');
+    addLog('INFO', '⚡ RAGE MODE');
+}
+
+async function legitMode() {
+    state.autoFire = false;
+    state.triggerBot = false;
+    await sendCommand('legitMode', { enabled: true });
+    document.getElementById('btnAutoFire').textContent = '🔥 AUTO OFF';
+    document.getElementById('btnAutoFire').style.border = 'none';
+    document.getElementById('btnTrigger').textContent = '🎯 TRIG OFF';
+    document.getElementById('btnTrigger').style.border = 'none';
+    showToast('🎯 LEGIT MODE', 'success');
+    addLog('INFO', '🎯 LEGIT MODE');
+}
+
+async function showStats() {
+    const r = await sendCommand('stats');
+    if (r && r.status === 'ok') {
+        const el = state.startTime ? Math.floor((Date.now() - state.startTime) / 1000) : 0;
+        const acc = r.shots > 0 ? (r.hits / r.shots * 100).toFixed(1) : 0;
+        showToast(
+            '📊 ' + el + 's | Bắn: ' + (r.shots || 0) + 
+            ' | Trúng: ' + (r.hits || 0) + ' | Acc: ' + acc + '%' +
+            ' | HS: ' + (r.headshots || 0) + ' | Kills: ' + (r.kills || 0)
+        );
+        addLog('INFO', 'Stats: Shots=' + (r.shots || 0) + ' Hits=' + (r.hits || 0));
+    }
+}
+
+async function resetStats() {
+    state.shotsFired = 0;
+    state.hitsLanded = 0;
+    state.headshots = 0;
+    state.kills = 0;
+    state.startTime = Date.now();
+    await sendCommand('reset');
+    showToast('🔄 ĐÃ RESET', 'success');
+    addLog('INFO', 'Stats reset');
+}
+
 // ================================================================
-// TOAST
+// KIỂM TRA KẾT NỐI
 // ================================================================
-let toastTimeout = null;
-function showToast(message, type = 'success') {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.className = `toast show ${type}`;
-    clearTimeout(toastTimeout);
-    toastTimeout = setTimeout(() => {
-        toast.className = 'toast';
-    }, 3000);
+async function testConnection() {
+    addLog('INFO', '⏳ Đang kiểm tra kết nối...');
+    try {
+        const url = PUBLIC_URL + '/ping';
+        const response = await fetch(url, {
+            headers: { 'ngrok-skip-browser-warning': 'true' }
+        });
+        if (response.ok) {
+            state.connectionStatus = "CONNECTED";
+            addLog('INFO', '✅ Kết nối thành công!');
+            showToast('✅ Kết nối thành công', 'success');
+        } else {
+            state.connectionStatus = "ERROR_" + response.status;
+            addLog('ERROR', '❌ Kết nối thất bại: HTTP ' + response.status);
+            showToast('❌ Lỗi ' + response.status, 'error');
+        }
+    } catch (e) {
+        state.connectionStatus = "ERROR";
+        addLog('ERROR', '❌ Không kết nối được: ' + e.message);
+        showToast('❌ ' + e.message, 'error');
+    }
+    updateStatus();
 }
 
 // ================================================================
 // KHỞI TẠO
 // ================================================================
-async function init() {
-    state.deviceUID = await getDeviceUID();
-    state.sessionId = Date.now().toString(36) + Math.random().toString(36).substr(2, 6);
-    addLog('INFO', `📱 UID: ${state.deviceUID}`);
-    addLog('INFO', `🌐 URL: ${CONFIG.PUBLIC_URL}`);
-    addLog('INFO', `📦 Version: ${CONFIG.VERSION}`);
+function init() {
+    addLog('INFO', '🌐 URL: ' + PUBLIC_URL);
+    addLog('INFO', '✅ Sẵn sàng');
     updateStatus();
-    document.querySelectorAll('[data-mode]').forEach(btn => {
-        btn.classList.toggle('btn-active', btn.dataset.mode === state.mode);
+    document.querySelectorAll('[data-mode]').forEach(b => {
+        b.classList.toggle('btn-active', b.dataset.mode === state.mode);
     });
-    // Auto ping
-    setInterval(async () => {
-        try {
-            const response = await fetch(`${CONFIG.PUBLIC_URL}/ping`, {
-                headers: { 'ngrok-skip-browser-warning': 'true' }
-            });
-            if (response.ok) {
-                state.connectionStatus = "CONNECTED";
-            } else {
-                state.connectionStatus = "ERROR";
-            }
-        } catch {
-            state.connectionStatus = "NO_CONNECTION";
-        }
-        updateStatus();
-    }, 10000);
-    showToast('🚀 AIMBOT PRO ĐÃ SẴN SÀNG', 'success');
-    addLog('INFO', '✅ Hệ thống khởi tạo thành công');
+    setTimeout(testConnection, 1000);
 }
 
-// Khởi chạy
 document.addEventListener('DOMContentLoaded', init);
 </script>
 
