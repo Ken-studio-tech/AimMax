@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AIMBOT PRO</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -16,7 +16,7 @@
         .status-text { font-size: 14px; font-weight: 600; }
         .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 8px 0; }
         .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 8px 0; }
-        .btn { padding: 14px 4px; border: none; border-radius: 10px; font-size: 12px; font-weight: 600; color: #fff; background: #1a1a2e; cursor: pointer; transition: all 0.15s; text-align: center; }
+        .btn { padding: 14px 4px; border: none; border-radius: 10px; font-size: 12px; font-weight: 600; color: #fff; background: #1a1a2e; cursor: pointer; transition: all 0.15s; text-align: center; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         .btn:active { transform: scale(0.92); opacity: 0.7; }
         .btn-primary { background: linear-gradient(135deg, #f7971e, #ffd200); color: #000; }
         .btn-success { background: linear-gradient(135deg, #00b894, #00cec9); }
@@ -41,13 +41,15 @@
         .toast.success { border-color: #00ff88; }
         .toast.error { border-color: #ff4444; }
         .footer { text-align: center; padding: 12px 0 4px; font-size: 10px; color: #333; border-top: 1px solid #1a1a2e; margin-top: 8px; }
+        .connected { color: #00ff88; }
+        .disconnected { color: #ff4444; }
     </style>
 </head>
 <body>
 
 <div class="header">
     <h1>🎯 AIMBOT PRO</h1>
-    <div style="font-size:11px;color:#555;margin-top:2px;">v3.0 | Vercel + Ngrok</div>
+    <div style="font-size:11px;color:#555;margin-top:2px;">✅ Hệ thống đang hoạt động</div>
 </div>
 
 <div class="status-bar">
@@ -61,6 +63,8 @@
     </div>
 </div>
 
+<div id="connectionStatus" style="text-align:center;padding:4px;font-size:11px;border-radius:6px;margin-bottom:8px;background:#111;color:#888;">⏳ Đang kiểm tra kết nối...</div>
+
 <div class="section-title">🎯 CHẾ ĐỘ AIM</div>
 <div class="grid">
     <button class="btn btn-primary btn-active" data-mode="head" onclick="setMode('head')">ĐẦU</button>
@@ -71,8 +75,8 @@
 
 <div class="section-title">⚡ ĐIỀU KHIỂN</div>
 <div class="grid-2">
-    <button class="btn btn-success" onclick="onAim()">▶️ BẬT</button>
-    <button class="btn btn-danger" onclick="offAim()">⏹ TẮT</button>
+    <button class="btn btn-success" id="btnOn" onclick="onAim()">▶️ BẬT</button>
+    <button class="btn btn-danger" id="btnOff" onclick="offAim()">⏹ TẮT</button>
     <button class="btn btn-pink" onclick="lockAim()">🔒 KHÓA</button>
     <button class="btn btn-blue" onclick="unlockAim()">🔓 MỞ</button>
 </div>
@@ -105,7 +109,7 @@
 
 <script>
 // ================================================================
-// CẤU HÌNH - THAY URL NGROK CỦA BẠN
+// CẤU HÌNH - URL NGROK CỦA BẠN
 // ================================================================
 const PUBLIC_URL = "https://wobbly-nucleus-bonanza.ngrok-free.dev";
 const VERSION = "3.0.0";
@@ -124,7 +128,7 @@ const state = {
     headshots: 0,
     kills: 0,
     startTime: 0,
-    connectionStatus: "DISCONNECTED"
+    connectionStatus: "CHECKING"
 };
 
 // ================================================================
@@ -133,7 +137,7 @@ const state = {
 function addLog(type, msg) {
     const box = document.getElementById('logBox');
     const time = new Date().toLocaleTimeString();
-    const map = { 'CMD': 'cmd', 'INFO': 'info', 'ERROR': 'error' };
+    const map = { 'CMD': 'cmd', 'INFO': 'info', 'ERROR': 'error', 'SUCCESS': 'info' };
     const div = document.createElement('div');
     div.className = 'log-entry';
     div.innerHTML = `<span class="time">[${time}]</span><span class="${map[type] || 'info'}">${msg}</span>`;
@@ -165,8 +169,7 @@ async function sendCommand(cmd, data = {}) {
             data: data,
             timestamp: Date.now() / 1000,
             version: VERSION,
-            device_uid: 'WEB_' + Date.now().toString(36),
-            session_id: Date.now().toString(36)
+            device_uid: 'WEB_' + Date.now().toString(36)
         };
         
         const response = await fetch(url, {
@@ -186,8 +189,8 @@ async function sendCommand(cmd, data = {}) {
         
         const result = await response.json();
         state.connectionStatus = "CONNECTED";
-        addLog('INFO', '✅ Kết nối thành công');
         updateStatus();
+        addLog('SUCCESS', '✅ Lệnh ' + cmd + ' thành công');
         return result;
         
     } catch (e) {
@@ -207,6 +210,8 @@ function updateStatus() {
     const text = document.getElementById('statusText');
     const modeBadge = document.getElementById('modeBadge');
     const urlDisplay = document.getElementById('urlDisplay');
+    const connStatus = document.getElementById('connectionStatus');
+    
     if (state.isActive) {
         dot.className = 'status-dot on';
         text.textContent = '🟢 ĐANG CHẠY';
@@ -219,6 +224,17 @@ function updateStatus() {
     modeBadge.textContent = state.mode.toUpperCase();
     modeBadge.className = 'badge ' + (state.isActive ? 'badge-on' : 'badge-off');
     urlDisplay.textContent = '🔗 ' + PUBLIC_URL.replace('https://', '');
+    
+    if (state.connectionStatus === "CONNECTED") {
+        connStatus.innerHTML = '✅ Kết nối thành công!';
+        connStatus.style.color = '#00ff88';
+    } else if (state.connectionStatus === "CHECKING") {
+        connStatus.innerHTML = '⏳ Đang kiểm tra kết nối...';
+        connStatus.style.color = '#ffcc00';
+    } else {
+        connStatus.innerHTML = '❌ Mất kết nối!';
+        connStatus.style.color = '#ff4444';
+    }
 }
 
 // ================================================================
@@ -243,9 +259,10 @@ async function onAim() {
         state.startTime = Date.now();
         updateStatus();
         showToast('✅ AIMBOT ĐÃ BẬT', 'success');
-        addLog('INFO', '🟢 Aimbot ON');
+        addLog('SUCCESS', '🟢 Aimbot ON');
     } else {
         addLog('ERROR', 'Bật aimbot thất bại');
+        showToast('❌ Bật thất bại', 'error');
     }
 }
 
@@ -352,10 +369,10 @@ async function testConnection() {
         });
         if (response.ok) {
             state.connectionStatus = "CONNECTED";
-            addLog('INFO', '✅ Kết nối thành công!');
+            addLog('SUCCESS', '✅ Kết nối thành công!');
             showToast('✅ Kết nối thành công', 'success');
         } else {
-            state.connectionStatus = "ERROR_" + response.status;
+            state.connectionStatus = "ERROR";
             addLog('ERROR', '❌ Kết nối thất bại: HTTP ' + response.status);
             showToast('❌ Lỗi ' + response.status, 'error');
         }
@@ -377,7 +394,7 @@ function init() {
     document.querySelectorAll('[data-mode]').forEach(b => {
         b.classList.toggle('btn-active', b.dataset.mode === state.mode);
     });
-    setTimeout(testConnection, 1000);
+    setTimeout(testConnection, 500);
 }
 
 document.addEventListener('DOMContentLoaded', init);
