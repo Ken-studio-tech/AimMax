@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIMBOT PRO</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -16,7 +16,7 @@
         .status-text { font-size: 14px; font-weight: 600; }
         .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 8px 0; }
         .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 8px 0; }
-        .btn { padding: 14px 4px; border: none; border-radius: 10px; font-size: 12px; font-weight: 600; color: #fff; background: #1a1a2e; cursor: pointer; transition: all 0.15s; text-align: center; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        .btn { padding: 14px 4px; border: none; border-radius: 10px; font-size: 12px; font-weight: 600; color: #fff; background: #1a1a2e; cursor: pointer; transition: all 0.15s; text-align: center; }
         .btn:active { transform: scale(0.92); opacity: 0.7; }
         .btn-primary { background: linear-gradient(135deg, #f7971e, #ffd200); color: #000; }
         .btn-success { background: linear-gradient(135deg, #00b894, #00cec9); }
@@ -27,7 +27,7 @@
         .btn-dark { background: #2d2d44; }
         .btn-active { border: 2px solid #00ff88; box-shadow: 0 0 20px #00ff8844; }
         .section-title { font-size: 12px; font-weight: 600; color: #888; margin: 14px 0 6px; text-transform: uppercase; letter-spacing: 1px; }
-        .log-box { background: #0a0a15; border: 1px solid #1a1a2e; border-radius: 10px; padding: 8px 10px; height: 100px; overflow-y: auto; font-family: monospace; font-size: 10px; color: #88ff88; margin-top: 8px; line-height: 1.4; }
+        .log-box { background: #0a0a15; border: 1px solid #1a1a2e; border-radius: 10px; padding: 8px 10px; height: 80px; overflow-y: auto; font-family: monospace; font-size: 10px; color: #88ff88; margin-top: 8px; line-height: 1.4; }
         .log-entry { padding: 2px 0; border-bottom: 1px solid #0f0f1a; }
         .log-entry .time { color: #555; margin-right: 4px; }
         .log-entry .info { color: #88ff88; }
@@ -47,7 +47,7 @@
 
 <div class="header">
     <h1>🎯 AIMBOT PRO</h1>
-    <div class="version" style="font-size:11px;color:#555;margin-top:2px;">v3.0 | Vercel + Ngrok</div>
+    <div style="font-size:11px;color:#555;margin-top:2px;">v3.0 | Vercel + Ngrok</div>
 </div>
 
 <div class="status-bar">
@@ -57,7 +57,7 @@
     </div>
     <div style="text-align:right;">
         <span class="badge badge-off" id="modeBadge">HEAD</span>
-        <div class="status-url" style="font-size:9px;color:#444;word-break:break-all;margin-top:2px;" id="urlDisplay">🔗 Đang kết nối...</div>
+        <div style="font-size:9px;color:#444;word-break:break-all;margin-top:2px;" id="urlDisplay">🔗 Đang kết nối...</div>
     </div>
 </div>
 
@@ -101,11 +101,11 @@
 </div>
 
 <div class="toast" id="toast"></div>
-<div class="footer">🔒 KHÔNG JAILBREAK | 📱 iOS 16+ | Vercel</div>
+<div class="footer">🔒 KHÔNG JAILBREAK | 📱 iOS 16+</div>
 
 <script>
 // ================================================================
-// CẤU HÌNH - THAY BẰNG URL NGROK CỦA BẠN
+// CẤU HÌNH - THAY URL NGROK CỦA BẠN
 // ================================================================
 const PUBLIC_URL = "https://wobbly-nucleus-bonanza.ngrok-free.dev";
 const VERSION = "3.0.0";
@@ -155,7 +155,7 @@ function showToast(msg, type = 'success') {
 }
 
 // ================================================================
-// GỬI LỆNH - DÙNG FETCH VỚI CORS
+// GỬI LỆNH
 // ================================================================
 async function sendCommand(cmd, data = {}) {
     try {
@@ -173,9 +173,7 @@ async function sendCommand(cmd, data = {}) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'ngrok-skip-browser-warning': 'true',
-                'X-Aimbot-Version': VERSION,
-                'X-Device-UID': 'WEB_' + Date.now().toString(36)
+                'ngrok-skip-browser-warning': 'true'
             },
             body: JSON.stringify(payload)
         });
@@ -326,11 +324,7 @@ async function showStats() {
     if (r && r.status === 'ok') {
         const el = state.startTime ? Math.floor((Date.now() - state.startTime) / 1000) : 0;
         const acc = r.shots > 0 ? (r.hits / r.shots * 100).toFixed(1) : 0;
-        showToast(
-            '📊 ' + el + 's | Bắn: ' + (r.shots || 0) + 
-            ' | Trúng: ' + (r.hits || 0) + ' | Acc: ' + acc + '%' +
-            ' | HS: ' + (r.headshots || 0) + ' | Kills: ' + (r.kills || 0)
-        );
+        showToast('📊 ' + el + 's | Bắn: ' + (r.shots || 0) + ' | Trúng: ' + (r.hits || 0) + ' | Acc: ' + acc + '%');
         addLog('INFO', 'Stats: Shots=' + (r.shots || 0) + ' Hits=' + (r.hits || 0));
     }
 }
